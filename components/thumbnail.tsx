@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 
 interface IThumbnailProps {
-  style: ImageStyle
+  style?: ImageStyle
   source: ImageSourcePropType
   onPress?: (event: GestureResponderEvent) => void
 }

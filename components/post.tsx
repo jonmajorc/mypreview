@@ -3,12 +3,12 @@ import { ImageStyle, Image, TouchableOpacity, ViewStyle } from 'react-native'
 import { Thumbnail } from './thumbnail'
 import { useNavigation } from '@react-navigation/native'
 
-interface IPreviewProps {
+interface IPostProps {
   source: string
   temp_value: any // TODO (JMC) delete
 }
 
-const Preview = (props: IPreviewProps) => {
+const Post = (props: IPostProps) => {
   const navigation = useNavigation()
 
   return (
@@ -21,4 +21,4 @@ const Preview = (props: IPreviewProps) => {
   )
 }
 
-export { Preview }
+export { Post }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavigationContainer } from '@react-navigation/native'
+import { NavigationContainer, ParamListBase } from '@react-navigation/native'
 import {
   createStackNavigator,
   CardStyleInterpolators,
@@ -44,7 +44,7 @@ function MainNavigator() {
   }, [])
 
   let handleNavigation = React.useCallback(
-    (screen: screens, params) => {
+    (screen: screens, params?: ParamListBase) => {
       if (isReadyRef.current && navigationRef.current)
         navigationRef.current.navigate(screen, params)
     },
@@ -119,15 +119,6 @@ function MainNavigator() {
               marginRight: 10,
             },
             headerTitle: 'Preview', // TODO (JMC) update with state of user account name
-            headerRight: () => {
-              return (
-                <Icon
-                  onPress={() => Alert.alert('button press!')}
-                  type="antdesign"
-                  name="appstore-o"
-                />
-              )
-            },
           }}
         />
         <Stack.Screen

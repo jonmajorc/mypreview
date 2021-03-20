@@ -2,15 +2,17 @@ import * as React from 'react'
 import {
   View,
   TextInput,
-  Text,
   ViewStyle,
   ScrollView,
   SafeAreaView,
   TextStyle,
-  Image,
   ImageStyle,
+  TouchableOpacity,
+  Text,
+  Modal,
 } from 'react-native'
 import { Thumbnail } from '../components/thumbnail'
+import { TextArea } from '../components/text-area'
 
 const Preview = ({ route, ...props }) => {
   return (
@@ -23,8 +25,28 @@ const Preview = ({ route, ...props }) => {
               uri: route.params.source,
             }}
           />
-          <TextInput style={TEXT_AREA} editable multiline />
+          <TextArea
+            style={TEXT_AREA}
+            copypaste
+            placeholder="I like long walks on the beach..."
+          />
         </View>
+        <View style={CAPTION}>
+          <TextArea copypaste placeholder="#beach #sand #beachbody  " />
+        </View>
+        <Modal
+          animationType="slide"
+          visible={false}
+          presentationStyle="pageSheet"
+        >
+          <SafeAreaView>
+            <ScrollView>
+              <View>
+                <Text>hello</Text>
+              </View>
+            </ScrollView>
+          </SafeAreaView>
+        </Modal>
       </ScrollView>
     </SafeAreaView>
   )
@@ -38,13 +60,11 @@ const CAPTION: ViewStyle = {
   flexDirection: 'row',
   backgroundColor: '#fff',
   padding: 15,
+  marginBottom: 25,
 }
 
 const TEXT_AREA: TextStyle = {
   height: 200,
-  flex: 1,
-  padding: 15,
-  backgroundColor: 'transparent',
 }
 
 const IMAGE: ImageStyle = {
@@ -52,6 +72,10 @@ const IMAGE: ImageStyle = {
   paddingTop: '33.3333%',
   resizeMode: 'cover',
   alignSelf: 'flex-start',
+}
+
+const COPY: ViewStyle = {
+  alignSelf: 'flex-end',
 }
 
 export { Preview }
