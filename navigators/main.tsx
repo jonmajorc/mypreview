@@ -5,13 +5,13 @@ import {
   CardStyleInterpolators,
 } from '@react-navigation/stack'
 import { TransitionSpec } from '@react-navigation/stack/src/types'
-import { Alert } from 'react-native'
 import { Icon } from 'react-native-elements'
 import { Feed } from '../screens/feed'
 import { Preview } from '../screens/preview'
 import { Settings } from '../screens/settings'
-import { observer } from 'mobx-react-lite'
 import { useStores } from '../stores'
+
+import { HeaderTitle } from '../components/user-header'
 
 const config: TransitionSpec = {
   animation: 'spring',
@@ -83,13 +83,13 @@ const MainNavigator = () => {
             headerRightContainerStyle: {
               marginRight: 10,
             },
-            headerTitle: 'jonmajorc', // TODO (JMC) update with state of user account name
+            headerTitle: () => <HeaderTitle />,
             headerRight: () => {
               return (
                 <Icon
                   onPress={feedStore.addPost}
                   type="antdesign"
-                  name="appstore-o"
+                  name="pluscircleo"
                 />
               )
             },
@@ -142,15 +142,6 @@ const MainNavigator = () => {
               marginRight: 10,
             },
             headerTitle: 'Settings', // TODO (JMC) update with state of user account name
-            headerRight: () => {
-              return (
-                <Icon
-                  onPress={() => Alert.alert('button press!')}
-                  type="antdesign"
-                  name="appstore-o"
-                />
-              )
-            },
           }}
         />
       </Stack.Navigator>

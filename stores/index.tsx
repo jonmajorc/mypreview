@@ -58,7 +58,7 @@ export const RootStoreProvider = ({ children }) => {
 export const useStores = () => useContext(RootStoreContext)
 
 const feedStoreData = {
-  user: '0',
+  user: 0,
   users: [
     {
       id: '0',
@@ -69,57 +69,5 @@ const feedStoreData = {
       name: 'jonmajorcmedia',
     },
   ],
-  posts: [
-    {
-      id: '0',
-      source:
-        'https://scontent-msp1-1.cdninstagram.com/v/t51.2885-15/e35/s1080x1080/161378934_204301864817040_2979915118463018514_n.jpg?tp=1&_nc_ht=scontent-msp1-1.cdninstagram.com&_nc_cat=100&_nc_ohc=7Eh9CSxxBt4AX9PWRZs&ccb=7-4&oh=94401738775bd3244b816dd454512293&oe=607D853B&ig_cache_key=MjUzMTQzOTEwMjIxNTk5NTQ5OQ%3D%3D.2-ccb7-4',
-      caption: 'I like long walks on the beach!',
-      user: 0,
-      hashtags: [
-        {
-          id: '0',
-          name: '#sandy',
-        },
-        {
-          id: '1',
-          name: '#longwalks',
-        },
-      ],
-    },
-    {
-      id: '1',
-      source:
-        'https://scontent-msp1-1.cdninstagram.com/v/t51.2885-15/e35/s1080x1080/161378934_204301864817040_2979915118463018514_n.jpg?tp=1&_nc_ht=scontent-msp1-1.cdninstagram.com&_nc_cat=100&_nc_ohc=7Eh9CSxxBt4AX9PWRZs&ccb=7-4&oh=94401738775bd3244b816dd454512293&oe=607D853B&ig_cache_key=MjUzMTQzOTEwMjIxNTk5NTQ5OQ%3D%3D.2-ccb7-4',
-      caption: 'hell',
-      user: 1,
-      hashtags: [
-        {
-          id: '0',
-          name: '#sandy',
-        },
-        {
-          id: '1',
-          name: '#longwalks',
-        },
-      ],
-    },
-    {
-      id: '2',
-      source:
-        'https://scontent-msp1-1.cdninstagram.com/v/t51.2885-15/e35/s1080x1080/161378934_204301864817040_2979915118463018514_n.jpg?tp=1&_nc_ht=scontent-msp1-1.cdninstagram.com&_nc_cat=100&_nc_ohc=7Eh9CSxxBt4AX9PWRZs&ccb=7-4&oh=94401738775bd3244b816dd454512293&oe=607D853B&ig_cache_key=MjUzMTQzOTEwMjIxNTk5NTQ5OQ%3D%3D.2-ccb7-4',
-      caption: 'I like long walks on the beach!',
-      user: 0,
-      hashtags: [
-        {
-          id: '0',
-          name: '#sandy',
-        },
-        {
-          id: '1',
-          name: '#longwalks',
-        },
-      ],
-    },
-  ],
+  posts: [],
 }
