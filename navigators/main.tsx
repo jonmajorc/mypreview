@@ -10,9 +10,8 @@ import { Icon } from 'react-native-elements'
 import { Feed } from '../screens/feed'
 import { Preview } from '../screens/preview'
 import { Settings } from '../screens/settings'
-import * as ImagePicker from 'expo-image-picker'
-import { useStores } from '../stores'
 import { observer } from 'mobx-react-lite'
+import { useStores } from '../stores'
 
 const config: TransitionSpec = {
   animation: 'spring',
@@ -36,21 +35,10 @@ export type PrimaryParamList = {
 
 const Stack = createStackNavigator<PrimaryParamList>()
 
-const MainNavigator = observer(() => {
+const MainNavigator = () => {
   const navigationRef = React.useRef(null)
   const isReadyRef = React.useRef(null)
-
-  let addPhoto = async () => {
-    let permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync()
-
-    if (permissionResult.granted === false) {
-      Alert.alert('Permission to access camera roll is required!')
-      return
-    }
-
-    let pickerResult = await ImagePicker.launchImageLibraryAsync()
-    console.log(pickerResult)
-  }
+  const { feedStore } = useStores()
 
   React.useEffect(() => {
     return () => {
@@ -98,7 +86,11 @@ const MainNavigator = observer(() => {
             headerTitle: 'jonmajorc', // TODO (JMC) update with state of user account name
             headerRight: () => {
               return (
-                <Icon onPress={addPhoto} type="antdesign" name="appstore-o" />
+                <Icon
+                  onPress={feedStore.addPost}
+                  type="antdesign"
+                  name="appstore-o"
+                />
               )
             },
             headerLeft: () => {
@@ -164,6 +156,6 @@ const MainNavigator = observer(() => {
       </Stack.Navigator>
     </NavigationContainer>
   )
-})
+}
 
 export { MainNavigator }

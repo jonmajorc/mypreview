@@ -12,7 +12,7 @@ const Feed = observer(() => {
     <SafeAreaView>
       <ScrollView>
         <View style={FEED}>
-          {feedStore.userFeed().map((post, index) => {
+          {feedStore.userFeed.map((post, index) => {
             return <Post key={index} data={post} />
           })}
         </View>
