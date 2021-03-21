@@ -5,17 +5,19 @@ import {
   ViewStyle,
   TextStyle,
   TouchableOpacity,
+  TextInputProps,
 } from 'react-native'
 import Clipboard from 'expo-clipboard'
 import { Icon } from 'react-native-elements'
 
-interface ITextArea {
+interface ITextArea extends TextInputProps {
   copypaste?: boolean
   style?: ViewStyle
   placeholder?: string
 }
 
 const TextArea = (props: ITextArea) => {
+  const { style, ...textAreaProps } = props
   let [caption, onChangeCaption] = React.useState('')
 
   let copyToClipboard = () => {
@@ -31,6 +33,7 @@ const TextArea = (props: ITextArea) => {
         value={caption}
         onChangeText={onChangeCaption}
         placeholder={props.placeholder}
+        {...textAreaProps}
       />
       {props.copypaste && (
         <TouchableOpacity style={COPY} onPress={() => copyToClipboard()}>

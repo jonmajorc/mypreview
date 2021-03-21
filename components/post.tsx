@@ -1,11 +1,10 @@
 import * as React from 'react'
-import { ImageStyle, Image, TouchableOpacity, ViewStyle } from 'react-native'
 import { Thumbnail } from './thumbnail'
 import { useNavigation } from '@react-navigation/native'
+import { IPost } from '../stores/models'
 
 interface IPostProps {
-  source: string
-  temp_value: any // TODO (JMC) delete
+  data: IPost
 }
 
 const Post = (props: IPostProps) => {
@@ -15,7 +14,7 @@ const Post = (props: IPostProps) => {
     <Thumbnail
       onPress={() => navigation.navigate('Preview', { ...props })}
       source={{
-        uri: props.source,
+        uri: props.data.source,
       }}
     />
   )

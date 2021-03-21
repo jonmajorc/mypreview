@@ -1,20 +1,19 @@
 import * as React from 'react'
 import {
   View,
-  TextInput,
   ViewStyle,
   ScrollView,
   SafeAreaView,
   TextStyle,
   ImageStyle,
-  TouchableOpacity,
   Text,
   Modal,
 } from 'react-native'
 import { Thumbnail } from '../components/thumbnail'
 import { TextArea } from '../components/text-area'
 
-const Preview = ({ route, ...props }) => {
+const Preview = (props) => {
+  const { route } = props
   return (
     <SafeAreaView>
       <ScrollView style={PREVIEW}>
@@ -22,13 +21,14 @@ const Preview = ({ route, ...props }) => {
           <Thumbnail
             style={IMAGE}
             source={{
-              uri: route.params.source,
+              uri: route.params.data.source,
             }}
           />
           <TextArea
             style={TEXT_AREA}
             copypaste
             placeholder="I like long walks on the beach..."
+            value={route.params.data.caption}
           />
         </View>
         <View style={CAPTION}>
