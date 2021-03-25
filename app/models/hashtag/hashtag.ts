@@ -7,7 +7,7 @@ export const HashtagModel = types
   .model("Hashtag")
   .props({
     name: types.string,
-    group: types.optional(types.string, ""),
+    group: types.maybe(types.string),
   })
   .views((hashtag) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
   .actions((hashtag) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars

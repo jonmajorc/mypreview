@@ -28,7 +28,10 @@ export const FeedScreen = observer(function FeedScreen() {
               source={{
                 uri: post.source,
               }}
-              onPress={() => navigation.navigate("Preview", { ...post })}
+              onPress={() => {
+                feedStore.selectPost(post.id)
+                navigation.navigate("Preview", { id: post.id })
+              }}
             />
           )
         })}

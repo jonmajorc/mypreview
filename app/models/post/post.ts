@@ -9,14 +9,29 @@ import { UserModel } from "../user/user"
 export const PostModel = types
   .model("Post")
   .props({
+    id: types.identifier,
     source: types.string,
     caption: types.optional(types.string, ""),
     hashtags: types.optional(types.array(HashtagModel), []),
     tagged: types.optional(types.array(AccountModel), []),
     user: types.reference(UserModel),
   })
-  .views((post) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions((post) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .views((post) => ({
+    get hashtagsStr() {
+      return post.hashtags.join(" ")
+    },
+  })) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .actions((post) => ({
+    onChangeCaption(value) {
+      post.caption = value
+    },
+    onChangeHashtags(hashtag) {
+      post.hashtags.push({ name: !hashtag.startsWith("#") ? `#${hashtag}` : hashtag })
+    },
+    onRemovePreviousHashtag() {
+      post.hashtags.pop()
+    },
+  })) // eslint-disable-line @typescript-eslint/no-unused-vars
 
 /**
  * Un-comment the following to omit model attributes from your snapshots (and from async storage).

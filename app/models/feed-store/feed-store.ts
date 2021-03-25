@@ -13,6 +13,7 @@ export const FeedStoreModel = types
     user: types.maybe(types.reference(UserModel)),
     posts: types.optional(types.array(PostModel), []),
     users: types.optional(types.array(UserModel), []),
+    selectedPost: types.maybe(types.reference(PostModel)),
   })
   .extend(withEnvironment)
   .views((feedStore) => ({
@@ -26,12 +27,20 @@ export const FeedStoreModel = types
         multiple: true,
       })
 
-      images.map((image) =>
-        feedStore.posts.push({ user: feedStore.user.id, source: image.sourceURL }),
-      )
+      images.map((image) => {
+        console.log(image)
+        feedStore.posts.push({
+          id: image.filename,
+          user: feedStore.user.id,
+          source: image.sourceURL,
+        })
+      })
     }),
     switchUser(userId: string) {
       feedStore.user = feedStore.users.filter((user) => user.id === userId)[0]
+    },
+    selectPost(postId) {
+      feedStore.selectedPost = postId
     },
   }))
 

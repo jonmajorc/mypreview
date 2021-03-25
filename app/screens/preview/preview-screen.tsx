@@ -7,26 +7,32 @@ import {
   TextStyle,
   ImageStyle,
   Text,
+  TextInput,
   Modal,
 } from "react-native"
 import { observer } from "mobx-react-lite"
-import { Screen, Thumbnail, TextArea } from "../../components"
+import { getSnapshot } from "mobx-state-tree"
+import { Screen, Thumbnail, TextArea, Pill } from "../../components"
 import { color } from "../../theme"
 // import { useNavigation } from "@react-navigation/native"
-// import { useStores } from "../../models"
+import { useStores } from "../../models"
 
 const ROOT: ViewStyle = {
   flex: 1,
 }
 
-export const PreviewScreen = observer(function PreviewScreen({ route, ...props }) {
-  // Pull in one of our MST stores
-  // const { someStore, anotherStore } = useStores()
+export const PreviewScreen = observer(function PreviewScreen() {
+  const { feedStore } = useStores()
+  const [hashtag, onSetHashtag] = React.useState("")
 
-  // Pull in navigation via hook
-  // const navigation = useNavigation()
+  React.useEffect(() => {
+    if (hashtag.startsWith(" ")) onSetHashtag("")
+    if (/^#?\w+\s$/.test(hashtag)) {
+      feedStore.selectedPost.onChangeHashtags(hashtag.trim())
+      onSetHashtag("")
+    }
+  }, [hashtag])
 
-  console.log(route, props)
   return (
     <Screen style={ROOT} preset="fixed" unsafe>
       <ScrollView style={PREVIEW}>
@@ -34,13 +40,36 @@ export const PreviewScreen = observer(function PreviewScreen({ route, ...props }
           <Thumbnail
             style={IMAGE}
             source={{
-              uri: route.params.source,
+              uri: feedStore.selectedPost.source,
             }}
           />
-          <TextArea style={TEXT_AREA} copypaste placeholder="I like long walks on the beach..." />
+          <TextArea
+            style={TEXT_AREA}
+            copypaste
+            placeholder="I like long walks on the beach..."
+            value={feedStore.selectedPost.caption}
+            onChangeText={feedStore.selectedPost.onChangeCaption}
+          />
         </View>
         <View style={CAPTION}>
-          <TextArea copypaste placeholder="#beach #sand #beachbody  " />
+          {feedStore.selectedPost.hashtags.map((hashtag) => {
+            return <Pill key={hashtag.name} text={hashtag.name} />
+          })}
+          <TextInput
+            onKeyPress={({ nativeEvent: { key: keyValue } }) => {
+              if (keyValue === "Backspace" && !hashtag.length) {
+                feedStore.selectedPost.onRemovePreviousHashtag()
+              }
+            }}
+            autoCapitalize="none"
+            autoCompleteType="off"
+            autoCorrect={false}
+            placeholder="#beach"
+            value={hashtag}
+            onChangeText={(value) => {
+              return onSetHashtag(value)
+            }}
+          />
         </View>
         <Modal animationType="slide" visible={false} presentationStyle="pageSheet">
           <SafeAreaView>
@@ -65,6 +94,7 @@ const CAPTION: ViewStyle = {
   backgroundColor: "#fff",
   padding: 15,
   marginBottom: 25,
+  flexWrap: "wrap",
 }
 
 const TEXT_AREA: TextStyle = {
