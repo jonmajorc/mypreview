@@ -1,10 +1,11 @@
-import { Instance, SnapshotOut, types } from "mobx-state-tree"
+import { Instance, SnapshotOut, types, flow } from "mobx-state-tree"
+import ImagePicker from "react-native-image-crop-picker"
 import { withEnvironment } from "../extensions/with-environment"
 import { PostModel } from "../post/post"
 import { UserModel } from "../user/user"
 
 /**
- * Model description here for TypeScript hints.
+ * Model to describe the feed store
  */
 export const FeedStoreModel = types
   .model("FeedStore")
@@ -14,8 +15,25 @@ export const FeedStoreModel = types
     users: types.optional(types.array(UserModel), []),
   })
   .extend(withEnvironment)
-  .views((feedStore) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
-  .actions((feedStore) => ({})) // eslint-disable-line @typescript-eslint/no-unused-vars
+  .views((feedStore) => ({
+    get userFeed() {
+      return feedStore.posts.filter((post) => post.user.name === feedStore.user.name)
+    },
+  }))
+  .actions((feedStore) => ({
+    addPost: flow(function* () {
+      const images = yield ImagePicker.openPicker({
+        multiple: true,
+      })
+
+      images.map((image) =>
+        feedStore.posts.push({ user: feedStore.user.id, source: image.sourceURL }),
+      )
+    }),
+    switchUser(userId: string) {
+      feedStore.user = feedStore.users.filter((user) => user.id === userId)[0]
+    },
+  }))
 
 /**
  * Un-comment the following to omit model attributes from your snapshots (and from async storage).

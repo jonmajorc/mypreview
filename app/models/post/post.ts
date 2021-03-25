@@ -9,7 +9,6 @@ import { UserModel } from "../user/user"
 export const PostModel = types
   .model("Post")
   .props({
-    id: types.identifier,
     source: types.string,
     caption: types.optional(types.string, ""),
     hashtags: types.optional(types.array(HashtagModel), []),

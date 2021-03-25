@@ -1,10 +1,41 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
 import { View, ViewStyle, Button, Alert } from "react-native"
-import { Screen, Text } from "../../components"
-// import { useNavigation } from "@react-navigation/native"
-import { useStores } from "../../models"
+import { Screen, Thumbnail } from "../../components"
+import { useNavigation } from "@react-navigation/native"
+import { useStores, Post as IPost } from "../../models"
 import { color } from "../../theme"
+
+export const FeedScreen = observer(function FeedScreen() {
+  const { feedStore } = useStores()
+  const navigation = useNavigation()
+
+  if (!feedStore.posts.length) {
+    return (
+      <View style={ADD_PHOTO}>
+        <Button onPress={feedStore.addPost} title="Add photos" />
+      </View>
+    )
+  }
+
+  return (
+    <Screen style={ROOT} preset="fixed" statusBar="dark-content" unsafe>
+      <View style={FEED}>
+        {feedStore.posts.map((post: IPost, index) => {
+          return (
+            <Thumbnail
+              key={index}
+              source={{
+                uri: post.source,
+              }}
+              onPress={() => navigation.navigate("Preview", { ...post })}
+            />
+          )
+        })}
+      </View>
+    </Screen>
+  )
+})
 
 const ROOT: ViewStyle = {
   backgroundColor: color.palette.offWhite,
@@ -24,28 +55,3 @@ const ADD_PHOTO: ViewStyle = {
   justifyContent: "center",
   alignItems: "center",
 }
-
-export const FeedScreen = observer(function FeedScreen() {
-  // Pull in one of our MST stores
-  const { feedStore } = useStores()
-
-  if (!feedStore.posts.length) {
-    return (
-      <View style={ADD_PHOTO}>
-        <Button onPress={() => Alert.alert("click!")} title="Add photos"></Button>
-      </View>
-    )
-  }
-
-  // Pull in navigation via hook
-  // const navigation = useNavigation()
-  return (
-    <Screen style={ROOT} preset="fixed" statusBar="dark-content" unsafe>
-      <View style={FEED}>
-        {feedStore.posts.map((post, index) => {
-          return <Post key={index} data={post} />
-        })}
-      </View>
-    </Screen>
-  )
-})

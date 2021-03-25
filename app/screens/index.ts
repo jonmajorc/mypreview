@@ -3,3 +3,4 @@ export * from "./demo/demo-screen"
 export * from "./demo/demo-list-screen"
 // export other screens here
 export * from "./feed/feed-screen"
+export * from "./preview/preview-screen"
