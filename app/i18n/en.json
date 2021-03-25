@@ -7,6 +7,9 @@
   "errors": {
     "invalidEmail": "Invalid email address."
   },
+  "feedScreen": {
+    "feedTitle": "Feed"
+  },
   "welcomeScreen": {
     "poweredBy": "POWERED BY IGNITE",
     "readyForLaunch": "Ready for launch.",

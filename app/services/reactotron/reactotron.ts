@@ -90,6 +90,7 @@ export class Reactotron {
       const { initial, snapshots } = this.config.state
       const name = "ROOT STORE"
 
+      console.log('my initial data', initialData)
       // logging features
       if (initial) {
         console.tron.display({ name, value: initialData, preview: "Initial State" })

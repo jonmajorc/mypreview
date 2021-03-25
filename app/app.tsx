@@ -30,16 +30,34 @@ import { ToggleStorybook } from "../storybook/toggle-storybook"
 // stack navigation, use `createNativeStackNavigator` in place of `createStackNavigator`:
 // https://github.com/kmagiera/react-native-screens#using-native-stack-navigator
 import { enableScreens } from "react-native-screens"
+import { cast } from "mobx-state-tree"
 enableScreens()
 
 export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
+
+const initialState: RootStore = cast({
+  feedStore: {
+    user: 0,
+    users: [
+      {
+        id: "0",
+        name: "jonmajorc",
+      },
+      {
+        id: "1",
+        name: "jonmajorcmedia",
+      },
+    ],
+    posts: [],
+  },
+})
 
 /**
  * This is the root component of our app.
  */
 function App() {
   const navigationRef = useRef<NavigationContainerRef>()
-  const [rootStore, setRootStore] = useState<RootStore | undefined>(undefined)
+  const [rootStore, setRootStore] = useState<RootStore | undefined>(initialState)
 
   setRootNavigation(navigationRef)
   useBackButtonHandler(navigationRef, canExit)
@@ -52,7 +70,7 @@ function App() {
   useEffect(() => {
     ;(async () => {
       await initFonts() // expo
-      setupRootStore().then(setRootStore)
+      setupRootStore(initialState).then(setRootStore)
     })()
   }, [])
 

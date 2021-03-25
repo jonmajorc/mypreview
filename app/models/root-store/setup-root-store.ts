@@ -24,7 +24,7 @@ export async function createEnvironment() {
 /**
  * Setup the root state.
  */
-export async function setupRootStore() {
+export async function setupRootStore(initialState = {}) {
   let rootStore: RootStore
   let data: any
 
@@ -32,7 +32,7 @@ export async function setupRootStore() {
   const env = await createEnvironment()
   try {
     // load data from storage
-    data = (await storage.load(ROOT_STATE_STORAGE_KEY)) || {}
+    data = (await storage.load(ROOT_STATE_STORAGE_KEY)) || initialState
     rootStore = RootStoreModel.create(data, env)
   } catch (e) {
     // if there's any problems loading, then let's at least fallback to an empty state
