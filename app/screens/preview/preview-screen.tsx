@@ -7,14 +7,10 @@ import {
   TextStyle,
   ImageStyle,
   Text,
-  TextInput,
   Modal,
 } from "react-native"
 import { observer } from "mobx-react-lite"
-import { getSnapshot } from "mobx-state-tree"
 import { Screen, Thumbnail, TextArea, Pill } from "../../components"
-import { color } from "../../theme"
-// import { useNavigation } from "@react-navigation/native"
 import { useStores } from "../../models"
 
 const ROOT: ViewStyle = {
@@ -24,6 +20,10 @@ const ROOT: ViewStyle = {
 export const PreviewScreen = observer(function PreviewScreen() {
   const { feedStore } = useStores()
   const [hashtag, onSetHashtag] = React.useState("")
+
+  const hashtagsCopied = React.useMemo(() => {
+    return `.\n.\n.\n.\n.\n${feedStore.selectedPost.hashtags.map(({ name }) => name).join(" ")}`
+  }, [feedStore.selectedPost.hashtags.length])
 
   React.useEffect(() => {
     if (hashtag.startsWith(" ")) onSetHashtag("")
@@ -36,7 +36,7 @@ export const PreviewScreen = observer(function PreviewScreen() {
   return (
     <Screen style={ROOT} preset="fixed" unsafe>
       <ScrollView style={PREVIEW}>
-        <View style={CAPTION}>
+        <View style={INPUT_VIEW}>
           <Thumbnail
             style={IMAGE}
             source={{
@@ -51,11 +51,11 @@ export const PreviewScreen = observer(function PreviewScreen() {
             onChangeText={feedStore.selectedPost.onChangeCaption}
           />
         </View>
-        <View style={CAPTION}>
-          {feedStore.selectedPost.hashtags.map((hashtag) => {
-            return <Pill key={hashtag.name} text={hashtag.name} />
-          })}
-          <TextInput
+        <View style={INPUT_VIEW}>
+          <TextArea
+            copypaste
+            copypasteValue={hashtagsCopied}
+            style={HASHTAG_INPUT}
             onKeyPress={({ nativeEvent: { key: keyValue } }) => {
               if (keyValue === "Backspace" && !hashtag.length) {
                 feedStore.selectedPost.onRemovePreviousHashtag()
@@ -70,6 +70,22 @@ export const PreviewScreen = observer(function PreviewScreen() {
               return onSetHashtag(value)
             }}
           />
+        </View>
+        <View style={HASHTAGS}>
+          {feedStore.selectedPost.hashtags.length ? (
+            feedStore.selectedPost.hashtags.map((hashtag) => {
+              return (
+                <Pill
+                  icon="close"
+                  onPressIcon={() => feedStore.selectedPost.onRemoveHashTag(hashtag)}
+                  key={hashtag.name}
+                  text={hashtag.name}
+                />
+              )
+            })
+          ) : (
+            <Text>Hashtags appear here 👋</Text>
+          )}
         </View>
         <Modal animationType="slide" visible={false} presentationStyle="pageSheet">
           <SafeAreaView>
@@ -87,14 +103,18 @@ export const PreviewScreen = observer(function PreviewScreen() {
 
 const PREVIEW: ViewStyle = {}
 
-const CAPTION: ViewStyle = {
-  borderBottomColor: "#000000",
-  borderBottomWidth: 1,
+const INPUT_VIEW: ViewStyle = {
   flexDirection: "row",
   backgroundColor: "#fff",
   padding: 15,
   marginBottom: 25,
   flexWrap: "wrap",
+}
+
+const HASHTAGS: ViewStyle = {
+  flexDirection: "row",
+  flexWrap: "wrap",
+  justifyContent: "center",
 }
 
 const TEXT_AREA: TextStyle = {
@@ -108,6 +128,7 @@ const IMAGE: ImageStyle = {
   alignSelf: "flex-start",
 }
 
-const COPY: ViewStyle = {
-  alignSelf: "flex-end",
+const HASHTAG_INPUT: TextStyle = {
+  height: 25,
+  flex: 1,
 }

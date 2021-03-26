@@ -14,6 +14,7 @@ interface ITextArea extends TextInputProps {
   copypaste?: boolean
   style?: ViewStyle
   placeholder?: string
+  copypasteValue?: string
 }
 
 const TextArea = (props: ITextArea) => {
@@ -21,7 +22,7 @@ const TextArea = (props: ITextArea) => {
   const [caption, onChangeCaption] = React.useState("")
 
   const copyToClipboard = () => {
-    Clipboard.setString(caption)
+    Clipboard.setString(props.copypasteValue || caption)
   }
 
   return (

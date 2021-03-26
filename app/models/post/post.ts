@@ -1,4 +1,5 @@
 import { Instance, SnapshotOut, types } from "mobx-state-tree"
+import { Alert } from "react-native"
 import { AccountModel } from "../account/account"
 import { HashtagModel } from "../hashtag/hashtag"
 import { UserModel } from "../user/user"
@@ -25,11 +26,18 @@ export const PostModel = types
     onChangeCaption(value) {
       post.caption = value
     },
-    onChangeHashtags(hashtag) {
-      post.hashtags.push({ name: !hashtag.startsWith("#") ? `#${hashtag}` : hashtag })
+    onChangeHashtags(value) {
+      const hashtag = !value.startsWith("#") ? `#${value}` : value
+      if (post.hashtags.find((tag) => tag.name === hashtag)) {
+        return Alert.alert(`Hashtag "${hashtag}" is already there!`)
+      }
+      post.hashtags.push({ name: hashtag })
     },
     onRemovePreviousHashtag() {
       post.hashtags.pop()
+    },
+    onRemoveHashTag(hashtag) {
+      post.hashtags.remove(hashtag)
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 
