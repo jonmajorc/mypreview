@@ -6,7 +6,7 @@
  */
 import React from "react"
 import { createStackNavigator } from "@react-navigation/stack"
-import { FeedScreen, PreviewScreen } from "../screens"
+import { FeedScreen, PreviewScreen, PreviewScreenOptions, FeedScreenOptions } from "../screens"
 
 /**
  * This type allows TypeScript to know what routes are defined in this navigator
@@ -31,8 +31,8 @@ const Stack = createStackNavigator<PrimaryParamList>()
 export function MainNavigator() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Feed" component={FeedScreen} />
-      <Stack.Screen name="Preview" component={PreviewScreen} />
+      <Stack.Screen name="Feed" component={FeedScreen} options={FeedScreenOptions} />
+      <Stack.Screen name="Preview" component={PreviewScreen} options={PreviewScreenOptions} />
     </Stack.Navigator>
   )
 }

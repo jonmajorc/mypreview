@@ -7,7 +7,6 @@ import {
   TextStyle,
   ImageStyle,
   Text,
-  Modal,
 } from "react-native"
 import { observer } from "mobx-react-lite"
 import { Screen, Thumbnail, TextArea, Pill } from "../../components"
@@ -16,6 +15,8 @@ import { useStores } from "../../models"
 const ROOT: ViewStyle = {
   flex: 1,
 }
+
+export const PreviewScreenOptions = {}
 
 export const PreviewScreen = observer(function PreviewScreen() {
   const { feedStore } = useStores()
@@ -87,15 +88,6 @@ export const PreviewScreen = observer(function PreviewScreen() {
             <Text>Hashtags appear here 👋</Text>
           )}
         </View>
-        <Modal animationType="slide" visible={false} presentationStyle="pageSheet">
-          <SafeAreaView>
-            <ScrollView>
-              <View>
-                <Text>hello</Text>
-              </View>
-            </ScrollView>
-          </SafeAreaView>
-        </Modal>
       </ScrollView>
     </Screen>
   )

@@ -1,10 +1,68 @@
 import React from "react"
 import { observer } from "mobx-react-lite"
-import { View, ViewStyle, Button, Alert } from "react-native"
-import { Screen, Thumbnail } from "../../components"
+import { View, ViewStyle, Button, TouchableOpacity, Text, Alert } from "react-native"
+import { Screen, Thumbnail, Modal, usePortal } from "../../components"
 import { useNavigation } from "@react-navigation/native"
+import CheckBox from "@react-native-community/checkbox"
 import { useStores, Post as IPost } from "../../models"
 import { color } from "../../theme"
+
+const HeaderTitle = observer(() => {
+  const { feedStore } = useStores()
+  const { dispatch } = usePortal()
+
+  return (
+    <View>
+      <TouchableOpacity
+        onPress={() => {
+          dispatch({
+            type: "open",
+            component: <SwitchUser />,
+          })
+        }}
+      >
+        <Text>{feedStore.user.name}</Text>
+      </TouchableOpacity>
+    </View>
+  )
+})
+
+const SwitchUser = observer(() => {
+  const [toggleCheckBox, setToggleCheckBox] = React.useState(false)
+  const { feedStore } = useStores()
+  const { dispatch } = usePortal()
+  return (
+    <Modal
+      onClickAway={() =>
+        dispatch({
+          type: "close",
+          component: undefined,
+        })
+      }
+    >
+      {feedStore.users.map((user) => {
+        return (
+          <View key={user.name}>
+            <CheckBox
+              disabled={false}
+              value={feedStore.user.name === user.name && toggleCheckBox}
+              onValueChange={(newValue) => {
+                setToggleCheckBox(newValue)
+                feedStore.switchUser(user.id)
+              }}
+            />
+            <Text>{user.name}</Text>
+          </View>
+        )
+      })}
+    </Modal>
+  )
+})
+
+export const FeedScreenOptions = {
+  // eslint-disable-next-line react/display-name
+  headerTitle: () => <HeaderTitle />,
+}
 
 export const FeedScreen = observer(function FeedScreen() {
   const { feedStore } = useStores()
@@ -21,7 +79,7 @@ export const FeedScreen = observer(function FeedScreen() {
   return (
     <Screen style={ROOT} preset="fixed" statusBar="dark-content" unsafe>
       <View style={FEED}>
-        {feedStore.posts.map((post: IPost, index) => {
+        {feedStore.userFeed.map((post: IPost, index) => {
           return (
             <Thumbnail
               key={index}
