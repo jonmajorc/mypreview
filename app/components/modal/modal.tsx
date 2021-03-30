@@ -1,5 +1,6 @@
 import * as React from "react"
 import { observer } from "mobx-react-lite"
+import Icon from "react-native-vector-icons/AntDesign"
 import {
   View,
   ViewStyle,
@@ -30,7 +31,15 @@ export const Modal = observer(function Modal(props: ModalProps) {
         <ScrollView directionalLockEnabled={true} contentContainerStyle={[CONTAINER, style]}>
           <TouchableWithoutFeedback>
             <View>
-              <View style={CONTENT}>{props.children}</View>
+              <View style={CONTENT}>
+                <Icon
+                  name="close"
+                  size={25}
+                  style={CLOSE_ICON}
+                  onPress={() => props.onClickAway(false)}
+                />
+                {props.children}
+              </View>
             </View>
           </TouchableWithoutFeedback>
         </ScrollView>
@@ -43,15 +52,13 @@ const CONTAINER: ViewStyle = {
   flex: 1,
   justifyContent: "center",
   alignItems: "center",
-  marginTop: 22,
 }
 
 const CONTENT: ViewStyle = {
   margin: 20,
   backgroundColor: "white",
   borderRadius: 20,
-  padding: 35,
-  alignItems: "center",
+  padding: 60,
   shadowColor: "#000",
   shadowOffset: {
     width: 0,
@@ -60,4 +67,11 @@ const CONTENT: ViewStyle = {
   shadowOpacity: 0.25,
   shadowRadius: 4,
   elevation: 5,
+  position: "relative",
+}
+
+const CLOSE_ICON: ViewStyle = {
+  position: "absolute",
+  padding: 20,
+  right: 0,
 }

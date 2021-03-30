@@ -1,4 +1,5 @@
 import { Instance, SnapshotOut, types, flow } from "mobx-state-tree"
+import { Alert } from "react-native"
 import ImagePicker from "react-native-image-crop-picker"
 import { withEnvironment } from "../extensions/with-environment"
 import { PostModel } from "../post/post"
@@ -18,23 +19,28 @@ export const FeedStoreModel = types
   .extend(withEnvironment)
   .views((feedStore) => ({
     get userFeed() {
-      return feedStore.posts.filter((post) => post.user.name === feedStore.user.name)
+      return feedStore.posts.filter((post) => post.user.name === feedStore.user.name).reverse()
     },
   }))
   .actions((feedStore) => ({
     addPost: flow(function* () {
-      const images = yield ImagePicker.openPicker({
-        multiple: true,
-      })
-
-      images.map((image) => {
-        console.log(image)
-        feedStore.posts.push({
-          id: image.filename,
-          user: feedStore.user.id,
-          source: image.sourceURL,
+      try {
+        const images = yield ImagePicker.openPicker({
+          multiple: true,
         })
-      })
+
+        images.forEach((image) => {
+          if (feedStore.userFeed.filter((post) => post.id === image.filename).length) {
+            return Alert.alert(`${image.filename} is present!`)
+          }
+
+          feedStore.posts.push({
+            id: image.filename,
+            user: feedStore.user.id,
+            source: image.sourceURL,
+          })
+        })
+      } catch (error) {}
     }),
     switchUser(userId: string) {
       feedStore.user = feedStore.users.filter((user) => user.id === userId)[0]
