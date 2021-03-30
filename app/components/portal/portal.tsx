@@ -1,34 +1,34 @@
 import * as React from "react"
 
-type Component = React.ReactNode | undefined
-type State = { open: boolean; component?: Component }
-type Action = { type: "open"; component?: Component } | { type: "close"; component?: Component }
+type State = { open: boolean }
+type Action = { type: "open" } | { type: "close" }
 type Dispatch = (action: Action) => void
 
 const PortalContext = React.createContext<{ state: State; dispatch: Dispatch } | undefined>(
   undefined,
 )
 
-function portalReducer(state: State, action: Action) {
+function portalReducer(state: State, action: Action): State {
   switch (action.type) {
     case "open": {
-      return { open: true, component: action.component }
+      return { ...state, open: true }
     }
     case "close": {
-      return { open: false, component: undefined }
+      return { ...state, open: false }
     }
   }
 }
 
+const Portal = ({ children }) => {
+  const { state } = usePortal()
+
+  return state.open ? children : null
+}
+
 function PortalProvider({ children }) {
-  const [state, dispatch] = React.useReducer(portalReducer, { open: false, component: undefined })
+  const [state, dispatch] = React.useReducer(portalReducer, { open: false })
   const value = { state, dispatch }
-  return (
-    <PortalContext.Provider value={value}>
-      {state.open && state.component}
-      {children}
-    </PortalContext.Provider>
-  )
+  return <PortalContext.Provider value={value}>{children}</PortalContext.Provider>
 }
 
 function usePortal() {
@@ -36,7 +36,11 @@ function usePortal() {
   if (context === undefined) {
     throw new Error("usePortal must be used within a PortalProvider")
   }
-  return context
+
+  const closePortal = () => context.dispatch({ type: "close" })
+  const openPortal = () => context.dispatch({ type: "open" })
+
+  return { ...context, closePortal, openPortal }
 }
 
-export { PortalProvider, usePortal }
+export { PortalProvider, usePortal, Portal }
