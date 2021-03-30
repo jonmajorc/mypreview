@@ -29,7 +29,6 @@ export const FeedScreen = observer(function FeedScreen() {
   const { feedStore } = useStores()
   const navigation = useNavigation()
   const { closePortal } = usePortal()
-  const [toggleCheckBox, setToggleCheckBox] = React.useState(false)
 
   if (!feedStore.posts.length) {
     return (
@@ -61,12 +60,12 @@ export const FeedScreen = observer(function FeedScreen() {
         <Modal onClickAway={closePortal}>
           {feedStore.users.map((user) => {
             return (
-              <View key={user.name}>
+              <View key={user.id}>
                 <CheckBox
                   disabled={false}
-                  value={feedStore.user.name === user.name && toggleCheckBox}
-                  onValueChange={(newValue) => {
-                    setToggleCheckBox(newValue)
+                  value={feedStore.user.id === user.id}
+                  onValueChange={() => {
+                    if (feedStore.user.id === user.id) return
                     feedStore.switchUser(user.id)
                   }}
                 />

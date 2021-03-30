@@ -38,7 +38,7 @@ export const NAVIGATION_PERSISTENCE_KEY = "NAVIGATION_STATE"
 
 const initialState: RootStore = cast({
   feedStore: {
-    user: 0,
+    user: "0",
     users: [
       {
         id: "0",
