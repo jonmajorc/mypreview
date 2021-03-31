@@ -35,7 +35,7 @@ export const FeedStoreModel = types
           }
 
           feedStore.posts.push({
-            id: image.filename,
+            id: `${feedStore.user.id}-${image.filename}`,
             user: feedStore.user.id,
             source: image.sourceURL,
           })
