@@ -1,13 +1,5 @@
 import React from "react"
-import {
-  View,
-  ViewStyle,
-  ScrollView,
-  SafeAreaView,
-  TextStyle,
-  ImageStyle,
-  Text,
-} from "react-native"
+import { View, ViewStyle, ScrollView, TextStyle, ImageStyle, Text } from "react-native"
 import { observer } from "mobx-react-lite"
 import { Screen, Thumbnail, TextArea, Pill } from "../../components"
 import { useStores } from "../../models"

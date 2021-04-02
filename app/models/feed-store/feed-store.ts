@@ -23,6 +23,9 @@ export const FeedStoreModel = types
     },
   }))
   .actions((feedStore) => ({
+    removePost(post) {
+      feedStore.posts.remove(post)
+    },
     addPost: flow(function* () {
       try {
         const images = yield ImagePicker.openPicker({

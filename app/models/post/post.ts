@@ -1,6 +1,7 @@
-import { Instance, SnapshotOut, types } from "mobx-state-tree"
+import { getParent, Instance, SnapshotOut, types } from "mobx-state-tree"
 import { Alert } from "react-native"
 import { AccountModel } from "../account/account"
+import { FeedStore as IFeedStore } from "../feed-store/feed-store"
 import { HashtagModel } from "../hashtag/hashtag"
 import { UserModel } from "../user/user"
 
@@ -38,6 +39,9 @@ export const PostModel = types
     },
     onRemoveHashTag(hashtag) {
       post.hashtags.remove(hashtag)
+    },
+    destroy: () => {
+      getParent<IFeedStore>(post, 2).removePost(post)
     },
   })) // eslint-disable-line @typescript-eslint/no-unused-vars
 

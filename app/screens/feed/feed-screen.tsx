@@ -6,7 +6,6 @@ import { Screen, Thumbnail, Modal, usePortal, Portal } from "../../components"
 import { useNavigation } from "@react-navigation/native"
 import CheckBox from "@react-native-community/checkbox"
 import { useStores, Post as IPost } from "../../models"
-import { TransitionSpec } from "@react-navigation/stack/src/types"
 import { color } from "../../theme"
 
 const HeaderTitle = observer(() => {
@@ -45,6 +44,11 @@ export const FeedScreen = observer(function FeedScreen() {
   const navigation = useNavigation()
   const { closePortal } = usePortal()
 
+  const previewPost = (post: IPost) => {
+    feedStore.selectPost(post.id)
+    navigation.navigate("Preview", { id: post.id })
+  }
+
   if (!feedStore.posts.length) {
     return (
       <View style={ADD_PHOTO}>
@@ -63,10 +67,25 @@ export const FeedScreen = observer(function FeedScreen() {
               source={{
                 uri: post.source,
               }}
-              onPress={() => {
-                feedStore.selectPost(post.id)
-                navigation.navigate("Preview", { id: post.id })
-              }}
+              onPress={() => previewPost(post)}
+              holdMenuItems={[
+                {
+                  text: "Actions",
+                  isTitle: true,
+                  onPress: () => null,
+                },
+                {
+                  text: "Preview",
+                  withSeperator: true,
+                  onPress: () => previewPost(post),
+                },
+
+                {
+                  text: "Delete",
+                  isDestructive: true,
+                  onPress: post.destroy,
+                },
+              ]}
             />
           )
         })}

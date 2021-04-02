@@ -23,6 +23,7 @@ import {
   setRootNavigation,
   useNavigationPersistence,
 } from "./navigators"
+import { HoldMenuProvider } from "react-native-hold-menu"
 import { RootStore, RootStoreProvider, setupRootStore } from "./models"
 import { ToggleStorybook } from "../storybook/toggle-storybook"
 import { PortalProvider } from "./components"
@@ -85,15 +86,17 @@ function App() {
   return (
     <ToggleStorybook>
       <RootStoreProvider value={rootStore}>
-        <SafeAreaProvider initialMetrics={initialWindowMetrics}>
-          <PortalProvider>
-            <RootNavigator
-              ref={navigationRef}
-              initialState={initialNavigationState}
-              onStateChange={onNavigationStateChange}
-            />
-          </PortalProvider>
-        </SafeAreaProvider>
+        <HoldMenuProvider theme="light">
+          <SafeAreaProvider initialMetrics={initialWindowMetrics}>
+            <PortalProvider>
+              <RootNavigator
+                ref={navigationRef}
+                initialState={initialNavigationState}
+                onStateChange={onNavigationStateChange}
+              />
+            </PortalProvider>
+          </SafeAreaProvider>
+        </HoldMenuProvider>
       </RootStoreProvider>
     </ToggleStorybook>
   )
