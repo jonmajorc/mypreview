@@ -74,5 +74,7 @@
 		<string>Zocial.ttf</string>
 		<string>Fontisto.ttf</string>
 	</array>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Need access to upload photos so you can curate your grid!</string>
 </dict>
 </plist>

@@ -49,53 +49,56 @@ export const FeedScreen = observer(function FeedScreen() {
     navigation.navigate("Preview", { id: post.id })
   }
 
-  if (!feedStore.posts.length) {
-    return (
-      <View style={ADD_PHOTO}>
-        <Button onPress={feedStore.addPost} title="Add photos" />
-      </View>
-    )
-  }
+  const userFeed = Array.isArray(feedStore.userFeed) ? feedStore.userFeed : []
 
   return (
     <Screen style={ROOT} preset="fixed" statusBar="dark-content" unsafe>
-      <View style={FEED}>
-        {feedStore.userFeed.map((post: IPost, index) => {
-          return (
-            <Thumbnail
-              key={index}
-              source={{
-                uri: post.source,
-              }}
-              onPress={() => previewPost(post)}
-              holdMenuItems={[
-                {
-                  text: "Actions",
-                  isTitle: true,
-                  onPress: () => null,
-                },
-                {
-                  text: "Preview",
-                  withSeperator: true,
-                  onPress: () => previewPost(post),
-                },
+      {userFeed.length ? (
+        <View style={FEED}>
+          {userFeed.map((post: IPost, index) => {
+            return (
+              <Thumbnail
+                key={index}
+                source={{
+                  uri: post.source,
+                }}
+                onPress={() => previewPost(post)}
+                holdMenuItems={[
+                  {
+                    text: "Actions",
+                    isTitle: true,
+                    onPress: () => null,
+                  },
+                  {
+                    text: "Preview",
+                    withSeperator: true,
+                    onPress: () => previewPost(post),
+                  },
 
-                {
-                  text: "Delete",
-                  isDestructive: true,
-                  onPress: post.destroy,
-                },
-              ]}
-            />
-          )
-        })}
-      </View>
+                  {
+                    text: "Delete",
+                    isDestructive: true,
+                    onPress: post.destroy,
+                  },
+                ]}
+              />
+            )
+          })}
+        </View>
+      ) : (
+        <View style={ADD_PHOTO}>
+          <Button onPress={feedStore.addPost} title="Add photos" />
+        </View>
+      )}
       <Portal>
         <Modal onClickAway={closePortal}>
-          {feedStore.users.map((user) => {
+          {feedStore.users.map((user, index) => {
             return (
               <TouchableOpacity
-                style={USER_OPTION}
+                style={[
+                  USER_OPTION,
+                  feedStore.users.length - 1 !== index && USER_OPTION_MARGIN_BOTTOM,
+                ]}
                 key={user.id}
                 onPress={() => {
                   if (feedStore.user.id === user.id) return
@@ -132,10 +135,11 @@ const ADD_PHOTO: ViewStyle = {
   alignItems: "center",
 }
 
+const USER_OPTION_MARGIN_BOTTOM = { marginBottom: 10 }
+
 const USER_OPTION: ViewStyle = {
   flexDirection: "row",
   alignItems: "center",
-  marginBottom: 10,
 }
 
 const USER_NAME: TextStyle = {
